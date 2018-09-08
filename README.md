@@ -1,4 +1,4 @@
-Writeup at http://www.gianlucaguarini.com/blog/building-applications-with-arduino-and-nodejs/
+The original writeup was at http://www.gianlucaguarini.com/blog/building-applications-with-arduino-and-nodejs/, but has since been taken down. This version is basically copied from the original, but includes a potentimeter (not reflected in the original circuit diagram)
 
 nodejs-arduino-example
 ======================
