@@ -9,18 +9,62 @@
     <title>Arduino and Nodejs</title>
     <style>
     center {
-        font-size: 100px;
+        font-size: 200px;
         font-family:arial;
     }
+	
+	.button {
+		font-size: 75px;
+		font-family: arial;
+		float: center;
+		
+	}
+	
+	.text {
+		font-size: 50px;
+		font-family: arial;
+		align: center;
+	}
+	
+	.progress-label {
+    float: left;
+	font-size: 20px;
+    margin-left: 50%;
+    margin-top: 5px;
+    font-weight: bold;
+    text-shadow: 1px 1px 0 #fff;
+	}
+	
+	.progress-bar {
+	
+	}
+	
     </style>
+	
+	<script src="socket.io/socket.io.js"></script>
+	<script src="jq/external/jquery/jquery.js"></script>
+	
+	<!---------JQuery UI includes for progress bar ------------------------->
+	<link rel="stylesheet" href="jq/jquery-ui.min.css">
+    <script src="jq/jquery-ui.js"></script>
+	
+	
 </head>
 <body>
-    <button>
-        Turn the light
+    <button class="button">
+        The light is: 
         <span>on</span>
-    </button>
-    <script src="socket.io/socket.io.js"></script>
-    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-    <script src="js/app.js"></script>
+    </button><br><br>
+	<text class = "text">
+		Potentiometer Value:
+	</text><br><br>
+	
+	<div id="progressbar" class="progress-bar">
+		<div class="progress-label">Waiting for data...</div>
+	</div>
+	
+	<script src="js/app.js"></script>
+	
+  	
 </body>
 </html>

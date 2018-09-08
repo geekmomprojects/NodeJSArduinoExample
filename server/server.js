@@ -3,10 +3,10 @@ var app = require('http').createServer(handler),
   fs = require('fs'),
   url = require('url'),
   SerialPort = require('serialport').SerialPort,
-  // initialize serialport using the /dev/cu.usbmodem1411 serial port
+  // initialize serialport using the COM36 serial port
   // remember to change this string if your arduino is using a different serial port
   sp = new SerialPort('COM36', {
-    baudRate: 115600
+    baudRate: 115200
   }),
   // this var will contain the message string dispatched by arduino
   arduinoMessage = '',
@@ -53,6 +53,7 @@ var app = require('http').createServer(handler),
 
 // creating a new websocket
 io.sockets.on('connection', function(socket) {
+   console.log('socket connected');
   // listen all the serial port messages sent from arduino and passing them to the proxy function sendMessage
   sp.on('data', function(data) {
     sendMessage(data, socket);
@@ -80,8 +81,8 @@ sp.on('open', function() {
 });
 
 // L3T'S R0CK!!!
-// creating the server ( localhost:8000 )
-app.listen(8000);
+// creating the server ( localhost:8000 if client is on server, or 'server-ip':8000 on remote client )
+  app.listen(8000);
 // server handler
 function handler(req, res) {
   readFile(url.parse(req.url).pathname, res);

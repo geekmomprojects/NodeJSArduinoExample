@@ -1,29 +1,16 @@
 (function() {
   'use strict';
   // create a new websocket
-  // Use your server's ip address below, instead of 192.168.1.16
-  var socket = io.connect('http://192.168.1.16:8000'),
+  var socket = io.connect('http://localhost:8000'),
     // select all the DOM elements needed for this experiment
     $body = $('body'),
     $btn = $('button'),
     $lightStatus = $('span', $btn),
 	$txt = $('text'),
-	progressbar = $("#progressbar"),
-	progressLabel = $(".progress-label"),
-	
     // the light must be off by default
-    lightStatus = 'off';
-	
-	progressbar.progressbar({
-	  value: false,
-	  max: 1024,
-	  change: function () {
-		  progressLabel.text(progressbar.progressbar("value") + "");
-	  },
-	});
-
+    lightStatus = 'off',
     // toggle the light status using the button on the page
-    var toggleLightStatus = function() {
+    toggleLightStatus = function() {
       // switch the lightStatus var ...
       lightStatus = lightStatus === 'off' ? 'on' : 'off';
       // pass its value to the nodejs server via websocket
@@ -39,14 +26,11 @@
       } else {
 		// print all the messages coming from the arduino board	
 		$txt.text(data);
-		progressbar.progressbar("value", parseInt(data.substring(4)));
 	  }
  
 
     };
-	
-	
-	
+
   // Set listeners
   socket.on('notification', onSocketNotification);
   $btn.on('click', toggleLightStatus);

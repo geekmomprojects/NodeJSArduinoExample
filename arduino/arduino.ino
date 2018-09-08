@@ -1,17 +1,22 @@
-// pin of the button connected to the arduino board
-const int buttonPin = 7;
-// pin of the led light
-// it's actually also the default arduino debug light
+
+/* 
+ *  Sketch that sends potentiometer values out through the serial port, and turns an LED on/off depending
+ *  on values read in through the serial port.
+ */
+
+// LED Light Pin
 const int ledPin = 6;
 
-// Potentiometer Pin - NOTE ADDED POTENTIOMETER TO ORIGINAL DESIGN
+// Potentiometer Pin
 const int potPin = A0;
 
-// simple variables used to store the led and the button statuses
-String buttonStatus = "off";
+// simple variables used to store the LED status
 String ledStatus = "off";
 
-// it will hold all the messages coming from the nodejs server
+// Store the most recent value of the potentiometer
+int lastPotVal = 0;
+
+// String to hold all the messages coming from the nodejs server
 String inputString = "";
 
 // whether the string received form nodejs is complete
@@ -27,9 +32,7 @@ boolean stringComplete = false;
 void setup()
 {
   // set the Baud Rate
-  Serial.begin(115600);
-  // set the input pin
-  pinMode(buttonPin, INPUT);
+  Serial.begin(115200);
   // initialize the LED pin as an output:
   pinMode(ledPin, OUTPUT);
   // Initialize potentiometer pin as input
@@ -46,32 +49,24 @@ void setup()
 void loop()
 {
   // read the button state and send a message to the nodejs server
-  listenButtonChanges(digitalRead(buttonPin));
+  listenPotChanges();
   // update the status of the led light connected to the arduino board
   updateLedStatus();
 }
 
-/**
- *
- * check the button connected to the pin 7 of the arduino board and
- * send messages through the serial port whenever the button gets clicked
- * @param  { boolean } tmpButtonStatus: its the current status of the button
- *
- */
 
-void listenButtonChanges (boolean tmpButtonStatus) {
-  // if it has not been clicked yet and it's down we can send the message
-  if (tmpButtonStatus && buttonStatus == "off") {
-    buttonStatus = "on";
-    Serial.println("Potval = ");
-    Serial.println(analogRead(potPin));
-    //Serial.println("Hello World");
-    // wait 1 s before sending the next message
-    delay(1000);
-  }
-  // if the button is not pressed anymore we reset the buttonStatus variable to off
-  if (!tmpButtonStatus) {
-    buttonStatus = "off";
+/**
+ *  Send an update of the potentiomter value if it changes by more than the threshold (we use
+ *  a threshold so as not to get swamped with readings due to random noise fluctuations.
+ */
+void listenPotChanges() {
+  const int THRESHOLD = 10;
+  int potVal = analogRead(potPin);
+  if (abs(potVal - lastPotVal) > THRESHOLD) {
+    Serial.print("Pot:");
+    Serial.println(potVal);
+    delay(50);  // Delay so we don't swamp serial port
+    lastPotVal = potVal;
   }
 }
 
